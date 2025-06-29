@@ -55,7 +55,9 @@ The protocol consists of two main contracts:
 ├── test/
 │   ├── StakedETH.t.sol        # Tests for StakedETH contract
 │   └── StakingContract.t.sol  # Tests for StakingContract
-├── lib/                       # Dependencies (OpenZeppelin, Forge)
+├── lib/                       # Dependencies (Git submodules)
+│   ├── forge-std/             # Foundry testing utilities (submodule)
+│   └── openzeppelin-contracts/ # OpenZeppelin contracts (submodule)
 └── foundry.toml              # Foundry configuration
 ```
 
@@ -64,26 +66,29 @@ The protocol consists of two main contracts:
 ### Prerequisites
 
 - [Foundry](https://book.getfoundry.sh/getting-started/installation) installed
+- Git
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository with submodules:
 ```bash
-git clone <repository-url>
-cd eth-stake
+git clone --recursive https://github.com/Agnish1611/eth-staking.git
+cd eth-staking
 ```
 
-2. Install dependencies:
+**Alternative:** If you already cloned without `--recursive`:
 ```bash
-forge install
+git clone https://github.com/Agnish1611/eth-staking.git
+cd eth-staking
+git submodule update --init --recursive
 ```
 
-3. Build the contracts:
+2. Build the contracts:
 ```bash
 forge build
 ```
 
-4. Run tests:
+3. Run tests:
 ```bash
 forge test
 ```
@@ -156,5 +161,28 @@ Test coverage includes:
 
 ## Dependencies
 
-- **OpenZeppelin Contracts**: For secure, audited contract implementations
-- **Forge Standard Library**: For testing utilities and cheat codes
+This project uses Git submodules to manage dependencies, keeping the repository lightweight while ensuring reproducible builds.
+
+- **OpenZeppelin Contracts** (`lib/openzeppelin-contracts/`): For secure, audited contract implementations
+- **Forge Standard Library** (`lib/forge-std/`): For testing utilities and cheat codes
+
+### Managing Dependencies
+
+**Update dependencies:**
+```bash
+# Update forge-std to latest
+cd lib/forge-std
+git pull origin main
+cd ../..
+git add lib/forge-std
+git commit -m "chore: update forge-std to latest"
+
+# Update OpenZeppelin to specific version
+cd lib/openzeppelin-contracts
+git checkout v5.0.0  # or any specific tag
+cd ../..
+git add lib/openzeppelin-contracts
+git commit -m "chore: update openzeppelin-contracts to v5.0.0"
+```
+
+**For contributors:** Always clone with `--recursive` or run `git submodule update --init --recursive` after pulling changes.
